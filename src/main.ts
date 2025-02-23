@@ -1,4 +1,4 @@
-import { ArcRotateCamera, CreateSphere, Engine, HemisphericLight, Mesh, MeshBuilder, Scene, SceneLoader, Vector3 } from 'babylonjs';
+import { ArcRotateCamera, Engine, HemisphericLight, Scene, SceneLoader, Vector3 } from 'babylonjs';
 import './style.css'
 import 'babylonjs-loaders'
 
@@ -19,6 +19,7 @@ const createScene = function() {
   
   // Create a basic light, aiming 0, 1, 0 - meaning, to the sky
   const light = new HemisphericLight('light1', new Vector3(0, 1, 0), scene);
+  console.log(light);
   
   // Create a built-in "sphere" shape using the SphereBuilder
   //const sphere = MeshBuilder.CreateSphere('sphere1', {segments: 16, diameter: 0.2, sideOrientation: Mesh.FRONTSIDE}, scene);
@@ -27,19 +28,28 @@ const createScene = function() {
   //sphere.position.y = 1;
 
   // Create a built-in "ground" shape;
-  const ground = MeshBuilder.CreateGround('ground1', {width: 6, height: 6, subdivisions: 2, updatable: false}, scene);
+  //const ground = MeshBuilder.CreateGround('ground1', {width: 6, height: 6, subdivisions: 2, updatable: false}, scene);
 
+  // loading my own model
   SceneLoader.ImportMeshAsync('splat', './', 'pesron2.splat', scene).then((result) => {
     const splat = result.meshes[0];
     splat.position = new Vector3(-1, 4.7, 0);
   });
 
+  // loading the house plant
   SceneLoader.ImportMeshAsync(null, './', 'house_plant.glb', scene).then((result) => {
     const glb = result.meshes[0];
     glb.position = new Vector3(2.5, 0, 2);
     glb.scaling = new Vector3(0.60, 0.60, 0.60)
   }).catch((error) => {
     console.error('Error loading room plant:', error);
+  });
+
+  // loading a carpet
+  SceneLoader.ImportMeshAsync(null, './', 'carpet.glb', scene).then((result) => {
+    const carpet = result.meshes[0];
+    carpet.position = new Vector3(1, 0, 1);
+    carpet.scaling = new Vector3(0.075, 0.075, 0.075)
   });
 
   // Return the created scene
